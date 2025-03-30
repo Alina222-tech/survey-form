@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="title"> Customer Satisfaction Survey</h1>
+    <p id="description">Thank you for taking the time to complete this survey. Your feedback helps us improve our products and services.</p>
+    <form id="survey-form" method="post">
+        <div>
+        <label id="name-label">Name</label>
+        <input type="text" placeholder="Alina...." required id="name"></div>
+        <div><label id="email-label">Email</label>
+        <input type="email" required id="email"  placeholder="Enter email" ></div>
+        <div<label id="number-label">Number</label>
+        <input type="number" id="number" min="10" max="12"  placeholder="Enter number" ></div>
+        <div>
+        <div class="labe">
+            <label>Which of the following features do you use most often? </label></div>            
+            <div>
+                <input type="checkbox" value="Ease of use" class="c"><span>Ease of use</span></div>
+                <div>
+                    <input type="checkbox" value="Price"  class="c"><span>Price</span></div>
+                    <div>
+                        <input type="checkbox" value="Customer service" class="c"><span>Customer service</span></div>
+                        <div>
+                            <input type="checkbox" value="Design" class="c"><span>Design</span></div>
+                            <div>
+                                <input type="checkbox" value="other" class="c"><span>Other </span></div>
+                            </div>
+       <div class="labe">
+    <label >What type of product did you purchase? </label></div>
+   <div>
+    <div>
+        <input type="radio" name="product-type" class="r"><span>Basic Model</span></div>
+   </div>
+   <div>
+    <input type="radio"  name="product-type" class="r"><span>Premium Model</span></div>
+</div>
+<div>
+    <input type="radio" name="product-type" class="r"><span>Accessory</span></div>
+</div>
+       </div>
+       <div class="labe">
+        <label for="rating">How would you rate our service?</label></div>
+<div>
+        <select  id="dropdown" name="rating" required>
+          <option value="">Select</option>
+          <option value="excellent">Excellent</option>
+          <option value="good">Good</option>
+          <option value="average">Average</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+      <div class="labe">
+        <label>What areas do you think could be improved?</label>
+      </div>
+      <div>
+        <textarea rows="5" cols="70"></textarea>
+      </div>
+        <div>
+            <button id="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>
