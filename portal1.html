@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz App</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+    }
+    #survey-form {
+      background-color: rgb(50, 50, 125);
+      margin: 20px auto;
+      padding: 40px;
+      width: 60%;
+      font-size: 18px;
+      border-radius: 10px;
+    }
+    #header {
+      display: flex;
+    }
+    #header img {
+      width: 120px;
+      height: auto;
+      margin: 40px 20px 10px 40px;
+      animation: rotateLogo 4s ease-in-out infinite;
+    }
+    #title {
+      color: pink;
+      font-size: 60px;
+      margin-top: 40px;
+      margin-left: 200px;
+      flex-grow: 1;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select {
+      width: 100%;
+      height: 30px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 5px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: pink;
+      color: black;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #ff69b4;
+    }
+    @keyframes rotateLogo {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    #quiz-container {
+      padding: 40px;
+      background-color: #444242;
+      width: 80%;
+      margin: 20px auto;
+      border-radius: 10px;
+    }
+    #quiz-container div {
+      margin-bottom: 20px;
+    }
+    #quiz-container p {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: pink;
+    }
+    #quiz-container label {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      color: white;
+    }
+    #quiz-container input[type="radio"] {
+      width: auto;
+      height: auto;
+      margin: 0 10px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="main">
+    <div id="header">
+      <img src="logo.PNG" alt="Logo" />
+      <h1 id="title">ECC Quiz Portal</h1>
+    </div>
+
+    <form id="survey-form" method="post">
+      <label>Name:</label>
+      <input type="text" placeholder="Enter Your Name" id="name" required />
+      <label>Email:</label>
+      <input type="email" id="email" placeholder="Enter Your Email" required />
+      <label>Number:</label>
+      <input type="text" id="number" placeholder="Enter Your Number" required />
+      <label>Select Class:</label>
+      <select id="class" required>
+        <option value="">-- Select --</option>
+        <option value="9th">9th</option>
+        <option value="10th">10th</option>
+        <option value="11th">11th</option>
+        <option value="12th">12th</option>
+      </select>
+      <label>Select Subject:</label>
+      <select id="subject" required>
+        <option value="">-- Select --</option>
+        <option value="Math">Math</option>
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="English">English</option>
+      </select>
+      <label>Select Difficulty:</label>
+      <select id="difficulty" required>
+        <option value="">-- Select --</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <label>Number of Questions:</label>
+      <select id="questions" required>
+        <option value="">-- Select --</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+
+      <button type="submit" id="quiz">Start Quiz</button>
+    </form>
+  </div>
+
+  <div id="quiz-container" style="display:none;"></div>
+
+  <script>
+    const sheetURLs = {
+      "9th-math-easy": "https://script.google.com/macros/s/AKfycbzPN01he2x2sDLDO7V5bvq1siDVeAB_nEOySxVpgqeYKnQJiZL4180xhFVfW4-BNJ0M/exec?sheet=sheet2",
+      "9th-physics-easy": "https://script.google.com/macros/s/AKfycbzzuAlYFIF6tt89ibOmRHbjchBPZdIRBmHXDqIpo3pmxd5cVs-m7YVpmjwS0z6Rm_gQ/exec?sheet=Sheet1",
+      "9th-chemistry-easy": "https://script.google.com/macros/s/AKfycbxFFKLJQp1I0iK2iGy-xn_Uoq8PqRII0NIgfrrNj0URn0ABXoLl_uyJHeq7wcRl2wgN/exec?sheet=sheet3"
+ 
+    };
+
+    document.getElementById("quiz").addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const number = document.getElementById("number").value.trim();
+      const clas = document.getElementById("class").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const difficulty = document.getElementById("difficulty").value.trim();
+      const questions = document.getElementById("questions").value.trim();
+
+      if (!name || !email || !number || !clas || !subject || !difficulty || !questions) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const sheetKey = `${clas}-${subject}-${difficulty}`.toLowerCase();
+
+      if (!sheetURLs[sheetKey]) {
+        alert("Quiz not available for selected options.");
+        return;
+      }
+
+      const url = `${sheetURLs[sheetKey]}&count=${questions}`;
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then(data => {
+          console.log(data);
+
+          const container = document.getElementById("quiz-container");
+          const form = document.getElementById("survey-form");
+          container.innerHTML = "";
+          form.style.display = "none";
+          container.style.display = "block";
+
+          if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = "<p style='color:pink;'>No questions available for this quiz.</p>";
+            return;
+          }
+
+          data.forEach((item, index) => {
+            const questionDiv = document.createElement("div");
+
+            const questionText = document.createElement("p");
+            questionText.textContent = `${index + 1}. ${item.question}`;
+            questionDiv.appendChild(questionText);
+
+            item.options.forEach(option => {
+              if (option !== undefined && option !== null) {
+                const label = document.createElement("label");
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = `question${index}`;
+                input.value = option;
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(" " + option));
+                questionDiv.appendChild(label);
+              }
+            });
+
+            container.appendChild(questionDiv);
+          });
+
+          const submitBtn = document.createElement("button");
+          submitBtn.textContent = "Submit Quiz";
+          submitBtn.style.marginTop = "20px";
+          container.appendChild(submitBtn);
+
+          submitBtn.addEventListener("click", () => {
+            let score = 0;
+            data.forEach((item, index) => {
+              const selected = document.querySelector(`input[name="question${index}"]:checked`);
+              if (selected && item.answer !== undefined) {
+                if (selected.value.toString().trim().toLowerCase() === item.answer.toString().trim().toLowerCase()) {
+                  score++;
+                }
+              }
+            });
+
+            container.innerHTML = ""; 
+            const result = document.createElement("p");
+            result.style.color = "pink";
+            result.style.fontSize = "24px";
+            result.textContent = `You scored ${score} out of ${data.length}`;
+            container.appendChild(result);
+
+            // Restart button
+            const restartBtn = document.createElement("button");
+            restartBtn.textContent = "Restart Quiz";
+            restartBtn.style.marginTop = "20px";
+            container.appendChild(restartBtn);
+
+            restartBtn.addEventListener("click", () => {
+              container.style.display = "none";
+              form.style.display = "block";
+            });
+          });
+
+        })
+        .catch(err => {
+          alert("Error loading quiz data.");
+          console.error(err);
+        });
+    });
+  </script>
+
+</body>
+</html>
