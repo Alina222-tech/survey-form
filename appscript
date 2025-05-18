@@ -1,0 +1,20 @@
+function doGet(e) {
+  const sheetName = e.parameter.sheet || 'Sheet1';
+  const count = parseInt(e.parameter.count) || 20;
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  const data = sheet.getDataRange().getValues();
+
+  const headers = data.shift();
+  const result = [];
+
+  for (let i = 1; i < Math.min(count, data.length); i++) {
+    const row = {};
+    for (let j = 1; j < headers.length; j++) {
+      row[headers[j]] = data[i][j];
+    }
+    result.push(row);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
